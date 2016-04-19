@@ -2,6 +2,6 @@ import pikabu
 import credentials
 
 api = pikabu.Api(login=credentials.login, password=credentials.password)
-hot = api.posts.get("hot",0)
-for post in hot:
+posts = api.posts.get("new",0)
+for post in posts:
 	print post.id
