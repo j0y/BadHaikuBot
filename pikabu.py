@@ -42,8 +42,7 @@ IS_LOGGED = False
 USER_DATA = {"login":None, "password":None}
 XPATH_XCSRFTOKEN = "/html/head/script[3]"
 XPATH_PIKAPOSTS_TITLE = '//*[@data-story-id="%s"]'
-XPATH_PIKAPOSTS_TEXT = '''//*[@id="story_table_%s"]//tr/td[2]/
-table[@id="story_main_t"]//tr/td/div[2]'''
+XPATH_PIKAPOSTS_TEXT = '''//*[@data-story-id="%s"]//div[3]'''
 XPATH_PIKAPOSTS_DESC = '//*[@id="textDiv%s"]/text()'
 XPATH_PIKAPOSTS_ATC = '''//*[@id="story_table_%s"]//tr/td[2]/
 table[@id="story_main_t"]//tr/td/div[%s]/span[1]/a[%s]'''
@@ -150,42 +149,21 @@ class PikabuPosts(PikaService):
             except Exception:
                 return False
             for post_id in json.loads(_page)["news_arr"]:
-                print(lxml.html.tostring(page_body))
+                #print(lxml.html.tostring(page_body))
                 post_title = page_body.xpath(
                     XPATH_PIKAPOSTS_TITLE % post_id)[0].text
                 post_url = page_body.xpath(
                     XPATH_PIKAPOSTS_TITLE % post_id)[0].get("href")
                 post_text = page_body.xpath(
                     XPATH_PIKAPOSTS_TEXT % post_id)[0].text
-                post_image = page_body.cssselect(
-                    'table#story_table_%s' % post_id)[0].get("lang")
                 try:
                     post_desc = " ".join(
                         page_body.xpath(XPATH_PIKAPOSTS_DESC % post_id))
                 except Exception:
                     post_desc = None
-                try:
-                    post_author = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 3, 3))[0].text
-                    post_time = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 3, 4))[0].text
-                    post_comments = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 3, 2))[0].text
-                except Exception:
-                    post_author = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 2, 3))[0].text
-                    post_time = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 2, 4))[0].text
-                    post_comments = page_body.xpath(
-                        XPATH_PIKAPOSTS_ATC % (post_id, 2, 2))[0].text
-                post_rating = page_body.xpath(
-                        XPATH_PIKAPOSTS_RATE % post_id)[0].text
-                post_tags = [result.text for result in page_body.xpath(
-                        XPATH_PIKAPOSTS_TAGS % post_id)]
+
                 posts_list.append(ObjectPosts(post_id, post_title, post_url,
-                        post_text, post_image, post_desc,
-                        post_author, post_time, post_comments,
-                        post_rating, post_tags))
+                        post_text))
             return posts_list
         else:
             return False
@@ -691,20 +669,12 @@ class PikabuSetRating(PikaService):
 
 class ObjectPosts():
     """Объект с постами"""
-    def __init__(self, _id, title, url, description,
-        image, text, author, time, comment, rating, tags):
+    def __init__(self, _id, title, url, description):
         self.id = _id
         self.title = title
         self.url = url
         self.description = description
         self.tags = None
-        self.image = image
-        self.text = text
-        self.author = author
-        self.time = time
-        self.comments = comment
-        self.rating = rating
-        self.tags = tags
 
     def tags(self, tags):
         self.tags = tags
