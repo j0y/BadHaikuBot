@@ -41,7 +41,7 @@ POST_HEADERS = {
 IS_LOGGED = False
 USER_DATA = {"login":None, "password":None}
 XPATH_XCSRFTOKEN = "/html/head/script[3]"
-XPATH_PIKAPOSTS_TITLE = '//*[@id="num_dig3%s"]'
+XPATH_PIKAPOSTS_TITLE = '//*[@data-story-id="%s"]'
 XPATH_PIKAPOSTS_TEXT = '''//*[@id="story_table_%s"]//tr/td[2]/
 table[@id="story_main_t"]//tr/td/div[2]'''
 XPATH_PIKAPOSTS_DESC = '//*[@id="textDiv%s"]/text()'
@@ -150,6 +150,7 @@ class PikabuPosts(PikaService):
             except Exception:
                 return False
             for post_id in json.loads(_page)["news_arr"]:
+                print(lxml.html.tostring(page_body))
                 post_title = page_body.xpath(
                     XPATH_PIKAPOSTS_TITLE % post_id)[0].text
                 post_url = page_body.xpath(
