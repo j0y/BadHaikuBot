@@ -23,7 +23,8 @@ for post in posts:
             striped_comment = BeautifulSoup(comment.text).text
             count = count_syllables(striped_comment)
             if count == 17:
-                print striped_comment
+                if striped_comment.count(" ") >= 2:
+                    print striped_comment
 
 
-#TODO: Check for minimum 3 words(2 spaces), then check if first word have 5 syllables ens with whole word, ten second, then third
+#TODO: Check if first word have 5 syllables ens with whole word, ten second, then third
