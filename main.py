@@ -3,10 +3,7 @@
 import pikabu
 import credentials
 import re
-
-def striphtml(data):
-    p = re.compile(r'<.*?>')
-    return p.sub('', data)
+from bs4 import BeautifulSoup
 
 vowels = set(u'аеёиоуыэюя')
 sign_chars = set(u'ъь')
@@ -18,14 +15,15 @@ def count_syllables(word):
 
 api = pikabu.Api(login=credentials.login, password=credentials.password)
 posts = api.posts.get("hot",0)
-#for post in posts:
-#   print post.id
 
-comments = api.comments.get(posts[0].id)
-for comment in comments:
-    if len(comment.text) < 100:
-        striped_comment = striphtml(comment.text)
-        print striped_comment
-        print count_syllables(striped_comment)
+for post in posts:
+    comments = api.comments.get(post.id)
+    for comment in comments:
+        if len(comment.text) < 100:
+            striped_comment = BeautifulSoup(comment.text).text
+            count = count_syllables(striped_comment)
+            if count == 17:
+                print striped_comment
 
-#TODO: Check for 17 syllablies and minimum 3 words(2 spaces), then check if first word have 5 syllables ens with whole word, ten second, then third
+
+#TODO: Check for minimum 3 words(2 spaces), then check if first word have 5 syllables ens with whole word, ten second, then third
