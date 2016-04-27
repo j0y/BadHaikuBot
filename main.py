@@ -8,7 +8,7 @@ import sqlite3
 
 db = sqlite3.connect('comments.db')
 #c = db.cursor() 
-#c.execute('''create table comments (comment text, post_id int, comment_id int)''') 
+#c.execute('''create table comments (comment text, post_id int, comment_id int unique)''') 
 
 vowels = set(u'аеёиоуыэюя')
 sign_chars = set(u'ъь')
