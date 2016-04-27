@@ -41,3 +41,6 @@ for post in posts:
                     if haiku:
                         print striped_comment
                         print ''.join(haiku)
+                        print post.id, comment.id
+                        result = ''.join(haiku)
+                        api.comments.add(result, post.id, comment.id)
