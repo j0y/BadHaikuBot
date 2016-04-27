@@ -17,11 +17,11 @@ api = pikabu.Api(login=credentials.login, password=credentials.password)
 posts = api.posts.get("hot",0)
 
 def haikufi(syllables):
-    for i in [5,7,12]:
-        if syllables[i-1][-1] == " " or syllables[i-1][-1] == "?":
-            syllables[i-1] = syllables[i-1][0:-1] + "\n"
-        elif syllables[i][0] == " " or syllables[i][0] == "?":
-            syllables[i] =   "\n" + syllables[i][1]
+    for i in [5,12]:
+        if syllables[i-1][-1] == " ":
+            syllables[i-1] = syllables[i-1][:-1] + "\n"
+        elif syllables[i][0] == " ":
+            syllables[i] =   "\n" + syllables[i][1:] #only first char, needed all after first
         else: return 0
     return syllables
 
@@ -36,8 +36,9 @@ for post in posts:
             if count == 17:
                 #checking for minimum 3 words
                 if striped_comment.count(" ") >= 2:
-                    print striped_comment
                     haiku = haikufi(syllables)
-                    print haiku
+                    if haiku:
+                        print striped_comment
+                        print ''.join(haiku)
 
 #TODO: Check if first word have 5 syllables ens with whole word, ten second, then third
