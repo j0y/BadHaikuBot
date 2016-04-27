@@ -45,8 +45,7 @@ for post in posts:
                     haiku = haikufi(syllables)
                     if haiku:
                         print striped_comment
-                        print ''.join(haiku)
-                        print post.id, comment.id
+                        print "http://pikabu.ru/story/empty_" + str(post.id) + "#comment_" + str(comment.id)
                         result = ''.join(haiku)
 
                         try:
