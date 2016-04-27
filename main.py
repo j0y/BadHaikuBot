@@ -4,6 +4,11 @@ import pikabu
 import credentials
 import re
 from bs4 import BeautifulSoup
+import sqlite3
+
+db = sqlite3.connect('comments.db')
+#c = db.cursor() 
+#c.execute('''create table comments (comment text, post_id int, comment_id int)''') 
 
 vowels = set(u'аеёиоуыэюя')
 sign_chars = set(u'ъь')
@@ -43,4 +48,13 @@ for post in posts:
                         print ''.join(haiku)
                         print post.id, comment.id
                         result = ''.join(haiku)
-                        api.comments.add(result, post.id, comment.id)
+
+                        try:
+                            with db:
+                                db.execute('''INSERT INTO comments(comment, post_id, comment_id)
+                                  VALUES(?,?,?)''', (result, post.id, comment.id))
+                                api.comments.add(result, post.id, comment.id)
+                        except sqlite3.IntegrityError:
+                            print('Record already exists')
+
+db.close()
