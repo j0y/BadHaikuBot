@@ -24,9 +24,13 @@ posts = api.posts.get("hot",0)
 #moving text to new line (replacing space with \n) in 5 and 12 syllable
 def haikufi(syllables):
     for i in [5,12]:
-        if syllables[i-1][-1] == " ":
+        #if it'sin the end of syllable
+        if syllables[i-1][-1] == "." or syllables[i-1][-1] == ",":
+            #replace last element with previous + \n
             syllables[i-1] = syllables[i-1][:-1] + "\n"
-        elif syllables[i][0] == " ":
+        #if it's first char in syllable
+        elif syllables[i][0] == "." or syllables[i][0] == ",":
+            #replace it with \n + all after first char
             syllables[i] =   "\n" + syllables[i][1:]
         else: return 0
     return syllables
