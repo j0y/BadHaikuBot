@@ -51,7 +51,7 @@ if __name__ == '__main__':
                     if striped_comment.count(" ") >= 2:
                         haiku = haikufi(syllables)
                         if haiku:
-                            print striped_comment
+                            print striped_comment.encode('utf-8')
                             print "http://pikabu.ru/story/empty_" + str(post.id) + "#comment_" + str(comment.id)
                             result = ''.join(haiku)
 
