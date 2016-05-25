@@ -42,7 +42,7 @@ if __name__ == '__main__':
         comments = api.comments.get(post.id)
         for comment in comments:
             if 20 < len(comment.text) < 100:
-                striped_comment = BeautifulSoup(comment.text).text
+                striped_comment = BeautifulSoup(comment.text).get_text()
                 syllables = get_syllables(striped_comment)
                 count = len(syllables)
                 #5 7 5 notation
