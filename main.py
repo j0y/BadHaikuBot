@@ -42,11 +42,14 @@ if __name__ == '__main__':
         comments = api.comments.get(post.id)
         for comment in comments:
             if 20 < len(comment.text) < 100:
-                striped_comment = BeautifulSoup(comment.text).get_text()
+                striped_comment = BeautifulSoup(comment.text).text
                 syllables = get_syllables(striped_comment)
                 count = len(syllables)
                 #5 7 5 notation
                 if count == 17:
+                    #check if it's ours
+                    if comment.author == credentials.login:
+                        break
                     #checking for minimum 3 words
                     if striped_comment.count(" ") >= 2:
                         haiku = haikufi(syllables)
